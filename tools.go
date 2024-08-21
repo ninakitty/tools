@@ -7,6 +7,7 @@ type Charset string
 const (
 	UTF8    = Charset("UTF-8")
 	GB18030 = Charset("GB18030")
+	GBK     = Charset("GBK")
 )
 
 //将字节数组转换为指定字符集的字符串
@@ -16,6 +17,9 @@ func ConvertByte2String(byte []byte, charset Charset) string {
 	switch charset {
 	case GB18030:
 		decodeBytes, _ := simplifiedchinese.GB18030.NewDecoder().Bytes(byte)
+		str = string(decodeBytes)
+	case GBK:
+		decodeBytes, _ := simplifiedchinese.GBK.NewDecoder().Bytes(byte)
 		str = string(decodeBytes)
 	case UTF8:
 		fallthrough
