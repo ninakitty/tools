@@ -1,6 +1,9 @@
 package tools
 
-import "golang.org/x/text/encoding/simplifiedchinese"
+import (
+	"golang.org/x/exp/rand"
+	"golang.org/x/text/encoding/simplifiedchinese"
+)
 
 type Charset string
 
@@ -10,7 +13,7 @@ const (
 	GBK     = Charset("GBK")
 )
 
-//将字节数组转换为指定字符集的字符串
+// 将字节数组转换为指定字符集的字符串
 func ConvertByte2String(byte []byte, charset Charset) string {
 
 	var str string
@@ -28,4 +31,17 @@ func ConvertByte2String(byte []byte, charset Charset) string {
 	}
 
 	return str
+}
+
+// 随机密码生成器
+func RandomPassword(length int) string {
+	if length < 1 {
+		return ""
+	}
+	var letters = []byte("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789`~!@#$%^&*()-_=+[{]}\\|;:'\",<.>/?")
+	var password = make([]byte, length)
+	for i := range password {
+		password[i] = letters[rand.Intn(len(letters))]
+	}
+	return string(password)
 }
