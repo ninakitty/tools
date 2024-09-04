@@ -1,6 +1,8 @@
 package tools
 
 import (
+	"time"
+
 	"golang.org/x/exp/rand"
 	"golang.org/x/text/encoding/simplifiedchinese"
 )
@@ -38,6 +40,7 @@ func RandomPassword(length int) string {
 	if length < 1 {
 		return ""
 	}
+	rand.Seed(uint64(time.Now().UnixNano()))
 	var letters = []byte("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789`~!@#$%^&*()-_=+[{]}\\|;:'\",<.>/?")
 	var password = make([]byte, length)
 	for i := range password {

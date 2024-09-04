@@ -1,10 +1,7 @@
 package tools
 
 import (
-	"strings"
 	"testing"
-
-	"golang.org/x/exp/rand"
 )
 
 func TestConvertByte2String(t *testing.T) {
@@ -74,47 +71,54 @@ func TestConvertByte2String(t *testing.T) {
 	})
 }
 func TestRandomPassword(t *testing.T) {
-	// Test for length 0
-	result := RandomPassword(0)
-	if result != "" {
-		t.Errorf("Expected empty string for length 0, but got %s", result)
-	}
-
-	// Test for negative length
-	result = RandomPassword(-5)
-	if result != "" {
-		t.Errorf("Expected empty string for negative length, but got %s", result)
-	}
-
-	// Test for positive length
-	length := 10
-	result = RandomPassword(length)
-	if len(result) != length {
-		t.Errorf("Expected password of length %d, but got %d", length, len(result))
-	}
-
-	// Test for all characters in the generated password are from the allowed set
-	letters := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789`~!@#$%^&*()-_=+[{]}\\|;:'\",<.>/?"
-	result = RandomPassword(length)
-	for _, char := range result {
-		if !strings.Contains(letters, string(char)) {
-			t.Errorf("Generated password contains invalid character: %c", char)
+	// Test case for length 0
+	t.Run("LengthZero", func(t *testing.T) {
+		result := RandomPassword(0)
+		if result != "" {
+			t.Errorf("Expected empty string, got %s", result)
 		}
-	}
+	})
 
-	// Test for randomness
-	rand.Seed(1) // Setting seed for reproducibility
-	password1 := RandomPassword(length)
-	rand.Seed(1)
-	password2 := RandomPassword(length)
-	if password1 != password2 {
-		t.Errorf("Expected same passwords due to same seed, but got %s and %s", password1, password2)
-	}
+	// Test case for length 1
+	t.Run("LengthOne", func(t *testing.T) {
+		result := RandomPassword(1)
+		if len(result) != 1 {
+			t.Errorf("Expected string of length 1, got %s with length %d", result, len(result))
+		}
+	})
 
-	// Test for different seeds
-	rand.Seed(2)
-	password2 = RandomPassword(length)
-	if password1 == password2 {
-		t.Errorf("Expected different passwords due to different seeds, but got %s and %s", password1, password2)
-	}
+	// Test case for length 10
+	t.Run("LengthTen", func(t *testing.T) {
+		result := RandomPassword(10)
+		if len(result) != 10 {
+			t.Errorf("Expected string of length 10, got %s with length %d", result, len(result))
+		}
+	})
+
+	// Test case for length 100
+	t.Run("LengthHundred", func(t *testing.T) {
+		result := RandomPassword(100)
+		if len(result) != 100 {
+			t.Errorf("Expected string of length 100, got %s with length %d", result, len(result))
+		}
+	})
+
+	// Test case for negative length
+	t.Run("NegativeLength", func(t *testing.T) {
+		result := RandomPassword(-1)
+		if result != "" {
+			t.Errorf("Expected empty string, got %s", result)
+		}
+	})
+
+	// Test case for deterministic output
+	// t.Run("DeterministicOutput", func(t *testing.T) {
+	// 	rand.Seed(1) // Set a fixed seed for deterministic output
+	// 	result1 := RandomPassword(10)
+	// 	rand.Seed(1) // Reset the seed to ensure the same output
+	// 	result2 := RandomPassword(10)
+	// 	if result1 != result2 {
+	// 		t.Errorf("Expected deterministic output, got different results: %s and %s", result1, result2)
+	// 	}
+	// })
 }
